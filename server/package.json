@@ -1,0 +1,12 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "~4.13.1",
+    "express-ws": "^4.0.0"
+  }
+}
