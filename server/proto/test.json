@@ -2,24 +2,25 @@
   "nested": {
     "CO": {
       "nested": {
-        "Test": {
-          "fields": {},
-          "nested": {
-            "HelloRequest": {
-              "fields": {
-                "name": {
-                  "type": "string",
-                  "id": 1
-                }
-              }
-            },
-            "HelloReply": {
-              "fields": {
-                "message": {
-                  "type": "string",
-                  "id": 1
-                }
-              }
+        "CMD": {
+          "values": {
+            "HelloRequest": 1,
+            "HelloReply": 2
+          }
+        },
+        "HelloRequest": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "HelloReply": {
+          "fields": {
+            "message": {
+              "type": "string",
+              "id": 1
             }
           }
         }

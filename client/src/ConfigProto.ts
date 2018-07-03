@@ -11,7 +11,7 @@ module co {
 
 		private m_pProtocolMap: Array<any>;
 
-		public static Common: number = 12340; //test
+		public static Common: number = 1; //test
 
 		public constructor() {
 			this.m_pProtocolMap = new Array();

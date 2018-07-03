@@ -1,34 +1,26 @@
+'use strict';
+
 var WebSocket = require("ws");
-// var express = require("express");
-// var app = express();
-// var server = require("http").createServer();
-var protobuf = require("protobufjs").Root;
-var testJson = require("./proto/test.json");
-var root = protobuf.fromJSON(testJson);
-// var helloRequset = root.lookupType("CO.HelloRequest");
-var HelloReply = root.lookupType("CO.HelloReply");
-var Test = root.lookup("CO.Test");
+var messageModule = require("./proto/MessageModule");
 
 var wss = new WebSocket.Server({
     port: 3000
 });
 
+var count = 0;
+var MessageModule = new messageModule();
 wss.on("connection", function (ws, req) {
-    console.error("链接成功", Test.HelloRequest);
+    ws.userId = count++;
+    MessageModule.AddClient(ws);
+
     ws.on("message", function (message) {
         var view = new DataView(message.buffer);
-        var protolcol = view.getInt32(6);
-        console.log("协议号是->", protolcol);
-        console.log("收到 message->", Test.HelloRequest.decode(message));
-
-        // var sendData = HelloReply.encode({
-        //     message: "send Hello"
-        // }).finish();
-        // ws.send(sendData);
-        sendProtocol(ws);
+        var protocol = view.getInt32(6);
+        MessageModule.parse(protocol, message, ws.userId);
     });
 
     ws.on("close", function (code, reason) {
+        MessageModule.RemoveClient(ws);
         console.error("关闭", code, reason);
         wss.broadcast(JSON.stringify({
             data: "有人离线了"
@@ -42,7 +34,7 @@ var sendProtocol = function (ws) {
         message: "Hello Nico"
     });
     var writerBuffer = HelloReply.encode(message);
-    writerBuffer.sfixed32(12341);
+    writerBuffer.sfixed32(2);
     var buffer = writerBuffer.finish();
 
     ws.send(buffer);
@@ -64,4 +56,3 @@ var someoneOnline = function (ws, data) {
         }
     });
 }
-

@@ -1,12 +1,15 @@
 syntax = "proto3";
 package CO;
 
-message Test{
-    message HelloRequest{
-    string name = 1;
-    }
+enum CMD{
+    HelloRequest = 1;
+    HelloReply = 2;
+}
 
-    message HelloReply {
-        string message = 1;
-    }
+message HelloRequest{
+    string name = 1;
+}
+
+message HelloReply {
+    string message = 1;
 }
