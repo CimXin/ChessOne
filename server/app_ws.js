@@ -1,14 +1,13 @@
 'use strict';
 
 var WebSocket = require("ws");
-var messageModule = require("./proto/MessageModule");
+var MessageModule = require("./proto/MessageModule");
 
 var wss = new WebSocket.Server({
     port: 3000
 });
 
 var count = 0;
-var MessageModule = new messageModule();
 wss.on("connection", function (ws, req) {
     ws.userId = count++;
     MessageModule.AddClient(ws);
@@ -27,18 +26,6 @@ wss.on("connection", function (ws, req) {
         }))
     })
 });
-
-
-var sendProtocol = function (ws) {
-    var message = HelloReply.create({
-        message: "Hello Nico"
-    });
-    var writerBuffer = HelloReply.encode(message);
-    writerBuffer.sfixed32(2);
-    var buffer = writerBuffer.finish();
-
-    ws.send(buffer);
-}
 
 wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
