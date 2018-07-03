@@ -187,7 +187,8 @@ module co {
             byteArray.position = byteArray.length - 4;
             byteArray.endian = egret.Endian.LITTLE_ENDIAN;
             var protocol = byteArray.readInt();
-
+            // protoBytes.endian = egret.Endian.LITTLE_ENDIAN;
+            // protoBytes.buffer.en
             var data = ProtoBuilder.decode(protocol, protoBytes.buffer);
 
             byteArray.clear();

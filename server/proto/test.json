@@ -11,12 +11,57 @@
         "HelloRequest": {
           "fields": {
             "name": {
+              "rule": "required",
               "type": "string",
               "id": 1
             }
           }
         },
+        "RankData": {
+          "fields": {
+            "name": {
+              "rule": "required",
+              "type": "string",
+              "id": 1
+            },
+            "rank": {
+              "rule": "required",
+              "type": "int32",
+              "id": 2
+            }
+          }
+        },
         "HelloReply": {
+          "fields": {
+            "message": {
+              "rule": "required",
+              "type": "string",
+              "id": 1
+            },
+            "rank": {
+              "rule": "repeated",
+              "type": "RankData",
+              "id": 2
+            },
+            "fucku": {
+              "rule": "repeated",
+              "type": "int32",
+              "id": 3,
+              "options": {
+                "packed": false
+              }
+            }
+          }
+        },
+        "HelloRequest1": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "HelloReply2": {
           "fields": {
             "message": {
               "type": "string",

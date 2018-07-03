@@ -1,4 +1,4 @@
-syntax = "proto3";
+syntax = "proto2";
 package CO;
 
 enum CMD{
@@ -7,9 +7,16 @@ enum CMD{
 }
 
 message HelloRequest{
-    string name = 1;
+   required string name = 1;
+}
+
+message RankData{
+  required  string name = 1;
+  required  int32 rank = 2;
 }
 
 message HelloReply {
-    string message = 1;
+    required  string message = 1;
+    repeated RankData rank = 2;
+    repeated int32 fucku = 3;
 }

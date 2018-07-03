@@ -3,6 +3,13 @@ message HelloRequest{
    required string name = 1;
 }
 
+message RankData{
+   required string name = 1;
+   required int32 rank = 2;
+}
+
 message HelloReply {
    required string message = 1;
+   repeated RankData rank = 2;
+   repeated int32 fucku = 3;
 }
