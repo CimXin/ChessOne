@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app_ws.js"
   },
   "dependencies": {
     "express": "~4.13.1",
-    "express-ws": "^4.0.0"
+    "express-ws": "^4.0.0",
+    "protobufjs": "^6.8.6",
+    "socket.io": "^2.1.1"
   }
 }

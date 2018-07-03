@@ -132,6 +132,7 @@ class Main extends egret.DisplayObjectContainer {
         colorLabel.y = 80;
         this.addChild(colorLabel);
 
+
         let textfield = new egret.TextField();
         this.addChild(textfield);
         textfield.alpha = 0;
@@ -143,6 +144,14 @@ class Main extends egret.DisplayObjectContainer {
         textfield.y = 135;
         this.textfield = textfield;
 
+        // var button = new eui.Image();
+        // button.x = this.width / 2;
+        // button.y = this.height / 2;
+        // button.width = button.height = 300;
+        // button.source = "egret_icon_png";
+        // this.addChild(button);
+
+        icon.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTestClick, this);
 
     }
 
@@ -191,20 +200,56 @@ class Main extends egret.DisplayObjectContainer {
 
     private webSocket: egret.WebSocket;
     private createGameScene1(): void {
-        this.webSocket = new egret.WebSocket();
-        this.webSocket.addEventListener(egret.ProgressEvent.SOCKET_DATA, this.onReceiveMessage, this);
-        this.webSocket.addEventListener(egret.Event.CONNECT, this.onSocketOpen, this);
+        // this.webSocket = new egret.WebSocket();
+        // this.webSocket.addEventListener(egret.ProgressEvent.SOCKET_DATA, this.onReceiveMessage, this);
+        // this.webSocket.addEventListener(egret.Event.CONNECT, this.onSocketOpen, this);
         // this.webSocket.connect("echo.websocket.org", 80);
-        this.webSocket.connect("127.0.0.1", 3000);
-
+        // this.webSocket.connect("127.0.0.1", 3000);
+        // var random = Math.round(Math.random());
+        // console.error(random);
+        // if (random == 0) {
+        //     this.webSocket.connectByUrl("ws://localhost:3000/login");
+        // } else {
+        //     this.webSocket.connectByUrl("ws://localhost:3000/test");
+        // }
+        // setInterval(() => {
+        //     this.onTestClick();
+        // }, 1000);
+        this.connect();
     }
     private onSocketOpen(): void {
-        var cmd = "Hello Egret WebSocket";
+        // for (var i = 0; i < 10; i++) {
+        var data = { "name": "mic", "code": "onLogin" };
+        var cmd = JSON.stringify(data);
         console.log("连接成功，发送数据：" + cmd);
         this.webSocket.writeUTF(cmd);
+        // }
     }
     private onReceiveMessage(e: egret.Event): void {
         var msg = this.webSocket.readUTF();
-        console.log("收到数据：" + msg);
+        var data = JSON.parse(msg);
+        console.log("收到数据：", data);
+    }
+
+    public onTestClick() {
+        var data = { msg: "click tap" };
+        var cmd = JSON.stringify(data);
+        console.log("点击发送" + cmd);
+        this.webSocket.writeUTF(cmd);
+    }
+
+
+    public connect() {
+        co.CSocket.getInstance().setConnectInfo("127.0.0.1", 3000);
+        co.CSocket.getInstance().close();
+        co.CSocket.getInstance().connect(this.onConnect, this, this.onSocketDisconnect, this);
+    }
+
+    private onConnect(data) {
+        console.error("onConnect", data);
+    }
+
+    private onSocketDisconnect(data) {
+        console.error("onSocketDisconnect", data);
     }
 }

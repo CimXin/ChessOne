@@ -1,0 +1,8 @@
+
+message HelloRequest{
+   required string name = 1;
+}
+
+message HelloReply {
+   required string message = 1;
+}
