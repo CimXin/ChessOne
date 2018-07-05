@@ -8,7 +8,8 @@
 		"libs/modules/promise/promise.js",
 		"libs/modules/socket/socket.js",
 		"libs/modules/eui/eui.js",
-		"libs/modules/protobuf/protobuf.js"
+		"libs/modules/protobuf/protobuf.js",
+		"libs/modules/puremvc/puremvc.js"
 	],
 	"game": [
 		"bin-debug/ConfigProto.js",
@@ -17,6 +18,7 @@
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/ProtoBuilder.js"
+		"bin-debug/ProtoBuilder.js",
+		"bin-debug/Controller/StartupCommand.js"
 	]
 }

@@ -6,8 +6,6 @@
     "start": "nodemon app_ws.js"
   },
   "dependencies": {
-    "express": "~4.13.1",
-    "express-ws": "^4.0.0",
     "protobufjs": "^6.8.6",
     "socket.io": "^2.1.1"
   }

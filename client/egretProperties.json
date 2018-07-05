@@ -30,6 +30,10 @@
     {
       "name":"protobuf",
       "path":"../modules/protobuf"
+    },
+    {
+      "name":"puremvc",
+      "path":"../modules/puremvc"
     }
   ]
 }

@@ -72,3 +72,8 @@ module.exports.broadcast = function (protocol, message) {
         }
     });
 }
+
+/**
+ * cmd->
+ * ▶ pbjs -t json test.proto test1.proto  > test.json
+ */
