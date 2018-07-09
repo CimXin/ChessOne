@@ -21,10 +21,10 @@ module co {
 			this.registerCommand(AppFacade.STARTUP, StartupCommand);
 		}
 
-		// public startUp(rootView: egret.DisplayObjectContainer) {
-		// 	this.sendNotification(ApplicationFacade.STARTUP, rootView);
-		// 	this.removeCommand(ApplicationFacade.STARTUP); //PureMVC初始化完成，注销STARUP命令
-		// }
+		public startUp(rootView: egret.DisplayObjectContainer) {
+			this.sendNotification(AppFacade.STARTUP, rootView);
+			this.removeCommand(AppFacade.STARTUP); //PureMVC初始化完成，注销STARUP命令
+		}
 
 	}
 }

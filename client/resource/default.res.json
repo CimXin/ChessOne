@@ -1,34 +1,47 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,test_proto",
+			"keys": "test_proto,loadingbar_png,loadingbarbg_png,loadingbg_jpg,LanguageCn_json",
 			"name": "preload"
 		},
 		{
-			"keys": "test_proto",
+			"keys": "test_proto,LanguageCn_json",
 			"name": "proto"
+		},
+		{
+			"keys": "loadingbg_jpg,loadingbarbg_png,loadingbar_png",
+			"name": "lanuch"
+		},
+		{
+			"keys": "loadingbg_jpg",
+			"name": "FMainUI"
 		}
 	],
 	"resources": [
 		{
-			"url": "assets/bg.jpg",
-			"type": "image",
-			"name": "bg_jpg"
-		},
-		{
-			"url": "assets/egret_icon.png",
-			"type": "image",
-			"name": "egret_icon_png"
-		},
-		{
-			"url": "config/description.json",
-			"type": "json",
-			"name": "description_json"
-		},
-		{
 			"url": "proto/test.proto",
 			"type": "text",
 			"name": "test_proto"
+		},
+		{
+			"url": "assets/loading/loadingbar.png",
+			"type": "image",
+			"name": "loadingbar_png"
+		},
+		{
+			"url": "assets/loading/loadingbarbg.png",
+			"type": "image",
+			"name": "loadingbarbg_png"
+		},
+		{
+			"url": "assets/loading/loadingbg.jpg",
+			"type": "image",
+			"name": "loadingbg_jpg"
+		},
+		{
+			"url": "lan/LanguageCn.json",
+			"type": "json",
+			"name": "LanguageCn_json"
 		}
 	]
 }

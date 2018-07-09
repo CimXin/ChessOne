@@ -1,0 +1,8 @@
+{
+	"autoGenerateExmlsList": true,
+	"path": "resource/default.thm.json",
+	"exmls": [
+		"resource/skin/common/CComButtonSkin.exml",
+		"resource/skin/app/setting/LoadingUISkin.exml"
+	]
+}

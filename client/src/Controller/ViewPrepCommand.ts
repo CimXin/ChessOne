@@ -3,7 +3,7 @@ module co {
 
 		public execute(notification: puremvc.INotification): void {
 			var data = notification.getBody();
-			this.facade.registerMediator(new AppFacade(data));
+			this.facade.registerMediator(new AppMediator(data));
 		}
 	}
 }

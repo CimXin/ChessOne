@@ -1,220 +1,138 @@
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 
-class Main extends egret.DisplayObjectContainer {
+class Main extends eui.UILayer {
 
-
+    private m_pLoadControl: co.LoadControl = null;
 
     public constructor() {
         super();
-        this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
-    private onAddToStage(event: egret.Event) {
+    public createChildren() {
+        super.createChildren();
 
-        egret.lifecycle.addLifecycleListener((context) => {
-            // custom lifecycle plugin
+        this.m_pLoadControl = new co.LoadControl(this);
+        this.m_pLoadControl.setStartCfg();
 
-            context.onUpdate = () => {
+        RES.setMaxLoadingThread(5);
 
+        var assetAdapter = new AssetAdapter();
+        this.stage.registerImplementation("eui.IAssetAdapter", assetAdapter);
+        this.stage.registerImplementation("eui.IThemeAdapter", new ThemeAdapter());
+
+        this.loadResConfig();
+    }
+
+    /**
+     * 加载资源
+     */
+    public loadResConfig() {
+        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onConfigComplete, this);
+        var resourceCfg = "default.res.json";
+
+        if (co.Utils.isWxGame()) {
+            RES.loadConfig("default.res.json", AppConfig.WXRES_SERVER_CNF + "resource/");
+        } else {
+            RES.loadConfig(AppConfig.RES_SERVER_CNF + resourceCfg + "?v=" + AppConfig.VERSION, AppConfig.RES_SERVER_CNF);
+        }
+    }
+
+    public onConfigComplete(event: RES.ResourceEvent) {
+        RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onConfigComplete, this);
+        var theme = null;
+        if (DEBUG) {
+            if (co.Utils.isWxGame()) {
+                theme = new CCTheme("resource/default.thm.json", this.stage);
+            } else {
+                theme = new CCTheme(AppConfig.RES_SERVER_CNF + "default.thm.json?v=" + AppConfig.VERSION, this.stage);
             }
-        })
-
-        egret.lifecycle.onPause = () => {
-            egret.ticker.pause();
+            theme.addEventListener(eui.UIEvent.COMPLETE, this.onThemeLoadComplete, this);
+        } else {
+            this.onThemeLoadComplete();
         }
-
-        egret.lifecycle.onResume = () => {
-            egret.ticker.resume();
-        }
-
-        this.runGame().catch(e => {
-            console.log(e);
-        })
-
-
-
-    }
-
-    private async runGame() {
-        await this.loadResource()
-        this.createGameScene();
-        const result = await RES.getResAsync("description_json")
-        this.startAnimation(result);
-        await platform.login();
-        const userInfo = await platform.getUserInfo();
-        console.log(userInfo);
-
-    }
-
-    private async loadResource() {
-        try {
-            const loadingView = new LoadingUI();
-            this.stage.addChild(loadingView);
-            await RES.loadConfig("resource/default.res.json", "resource/");
-            await RES.loadGroup("preload", 0, loadingView);
-            this.stage.removeChild(loadingView);
-        }
-        catch (e) {
-            console.error(e);
-        }
-    }
-
-    private textfield: egret.TextField;
-
-    /**
-     * 创建游戏场景
-     * Create a game scene
-     */
-    private createGameScene() {
-        let sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
-        let stageW = this.stage.stageWidth;
-        let stageH = this.stage.stageHeight;
-        sky.width = stageW;
-        sky.height = stageH;
-
-        let topMask = new egret.Shape();
-        topMask.graphics.beginFill(0x000000, 0.5);
-        topMask.graphics.drawRect(0, 0, stageW, 172);
-        topMask.graphics.endFill();
-        topMask.y = 33;
-        this.addChild(topMask);
-
-        let icon = this.createBitmapByName("egret_icon_png");
-        this.addChild(icon);
-        icon.x = 26;
-        icon.y = 33;
-
-        let line = new egret.Shape();
-        line.graphics.lineStyle(2, 0xffffff);
-        line.graphics.moveTo(0, 0);
-        line.graphics.lineTo(0, 117);
-        line.graphics.endFill();
-        line.x = 172;
-        line.y = 61;
-        this.addChild(line);
-
-
-        let colorLabel = new egret.TextField();
-        colorLabel.textColor = 0xffffff;
-        colorLabel.width = stageW - 172;
-        colorLabel.textAlign = "center";
-        colorLabel.text = "Hello Egret";
-        colorLabel.size = 24;
-        colorLabel.x = 172;
-        colorLabel.y = 80;
-        this.addChild(colorLabel);
-
-
-        let textfield = new egret.TextField();
-        this.addChild(textfield);
-        textfield.alpha = 0;
-        textfield.width = stageW - 172;
-        textfield.textAlign = egret.HorizontalAlign.CENTER;
-        textfield.size = 24;
-        textfield.textColor = 0xffffff;
-        textfield.x = 172;
-        textfield.y = 135;
-        this.textfield = textfield;
-
-        // var button = new eui.Image();
-        // button.x = this.width / 2;
-        // button.y = this.height / 2;
-        // button.width = button.height = 300;
-        // button.source = "egret_icon_png";
-        // this.addChild(button);
-
-        icon.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTestClick, this);
-
+        RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
+        RES.addEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onResourceLoadError, this);
+        RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
+        RES.addEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemLoadError, this);
     }
 
     /**
-     * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
-     * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
-     */
-    private createBitmapByName(name: string) {
-        let result = new egret.Bitmap();
-        let texture: egret.Texture = RES.getRes(name);
-        result.texture = texture;
-        return result;
+    * 主题文件加载完成
+        开始从游戏中心服拉取玩家的数据
+    */
+    private onThemeLoadComplete(): void {
+        this.m_pLoadControl.setComplete(co.LoadType.Theme);
+        this.m_pLoadControl.reqServerData();
+        this.loadLaunch();
+    }
+
+    /**分组加载完毕回调 */
+    private onResourceLoadComplete(event: RES.ResourceEvent): void {
+        var groupName = event.groupName;
+        if (groupName == "lanuch") {
+            co.Language.getInstance().loadLocalLan();
+            this.createLoading();
+        } else if (groupName == "FMainUI") {
+            this.m_pLoadControl.setComplete(co.LoadType.Resource);
+
+            RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
+            RES.removeEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onResourceLoadError, this);
+            RES.removeEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
+            RES.removeEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemLoadError, this);
+        }
     }
 
     /**
-     * 描述文件加载成功，开始播放动画
-     * Description file loading is successful, start to play the animation
+    * 资源组加载出错
+    */
+    private onResourceLoadError(event: RES.ResourceEvent): void {
+        //忽略加载失败的项目
+        this.onResourceLoadComplete(event);
+    }
+
+    /**
+     * preload资源组加载进度
      */
-    private startAnimation(result: string[]) {
-        let parser = new egret.HtmlTextParser();
+    private onResourceProgress(event: RES.ResourceEvent): void {
+    }
 
-        let textflowArr = result.map(text => parser.parse(text));
-        let textfield = this.textfield;
-        let count = -1;
-        let change = () => {
-            count++;
-            if (count >= textflowArr.length) {
-                count = 0;
-            }
-            let textFlow = textflowArr[count];
+    /**
+   * 资源组加载出错
+   */
+    private onItemLoadError(event: RES.ResourceEvent): void {
+        console.warn("Url:" + event.resItem.url + " has failed to load");
+    }
 
-            // 切换描述内容
-            // Switch to described content
-            textfield.textFlow = textFlow;
-            let tw = egret.Tween.get(textfield);
-            tw.to({ "alpha": 1 }, 200);
-            tw.wait(2000);
-            tw.to({ "alpha": 0 }, 200);
-            tw.call(change, this);
-        };
+    public createLoading() {
+        co.AppFacade.getInstance().startUp(this);
+        this.m_pLoadControl.createView();
 
-        change();
+        this.loadProtoMainUI();
+    }
 
-        this.createGameScene1();
+    private loadProtoMainUI() {
+        var preloadList = [
+            ['proto', 4],
+            ['FMainUI', 3]
+        ];
+        this.loadResByList(preloadList);
+    }
+
+    private loadResByList(list): number {
+        var preloadTotal: number = 0;
+        for (var i = 0; i < list.length; i++) {
+            var item: any = list[i];
+            preloadTotal += RES.getGroupByName(item[0]).length;
+            RES.loadGroup(item[0], item[1]);
+        }
+        return preloadTotal;
+    }
+
+    public loadLaunch() {
+        RES.loadGroup("lanuch", 1);
     }
 
     private webSocket: egret.WebSocket;
     private createGameScene1(): void {
-        // this.webSocket = new egret.WebSocket();
-        // this.webSocket.addEventListener(egret.ProgressEvent.SOCKET_DATA, this.onReceiveMessage, this);
-        // this.webSocket.addEventListener(egret.Event.CONNECT, this.onSocketOpen, this);
-        // this.webSocket.connect("echo.websocket.org", 80);
-        // this.webSocket.connect("127.0.0.1", 3000);
-        // var random = Math.round(Math.random());
-        // console.error(random);
-        // if (random == 0) {
-        //     this.webSocket.connectByUrl("ws://localhost:3000/login");
-        // } else {
-        //     this.webSocket.connectByUrl("ws://localhost:3000/test");
-        // }
-        // setInterval(() => {
-        //     this.onTestClick();
-        // }, 1000);
         this.connect();
     }
     private onSocketOpen(): void {

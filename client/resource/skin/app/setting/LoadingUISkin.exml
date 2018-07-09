@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="LoadingUISkin" width="750" height="1334" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="loadingbg_jpg" horizontalCenter="0" verticalCenter="0" width="100%" height="100%"/>
+	<e:Group id="group_progress" y="976.12" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0">
+		<e:Image source="loadingbarbg_png" horizontalCenter="0" verticalCenter="0"/>
+		<e:Image id="image_progress" verticalCenter="0" source="loadingbar_png" left="1"/>
+		<e:Label id="label_progress" text="Label" size="22" horizontalCenter="0" verticalCenter="0"/>
+	</e:Group>
+	<e:Label id="label_tips" text="Label" y="858" horizontalCenter="0"/>
+</e:Skin>

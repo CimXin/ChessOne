@@ -20,6 +20,7 @@ module.exports.AddClient = function (ws) {
     }
 }
 
+/**断开连接 */
 module.exports.RemoveClient = function (ws) {
     var userId = ws.userId;
     if (cliend_ws.has(userId)) {
@@ -48,7 +49,7 @@ module.exports.parse = function (protocol, message, userId) {
     this.send(protocol + 1, CO.HelloReply.create({
         message: "Send HelloReply",
         rank: [data1, data2],
-        fucku: [1,2]
+        fucku: [1, 2]
     }), userId);
 }
 
@@ -71,6 +72,15 @@ module.exports.broadcast = function (protocol, message) {
             ws.send(sendBuffer);
         }
     });
+}
+
+module.exports.isOnline = function (userId) {
+    var data = cliend_ws.get(userId);
+    return !!data;
+}
+
+module.exports.getOnlineNum = function () {
+    return cliend_ws.size;
 }
 
 /**

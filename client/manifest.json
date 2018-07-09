@@ -12,13 +12,33 @@
 		"libs/modules/puremvc/puremvc.js"
 	],
 	"game": [
-		"bin-debug/ConfigProto.js",
-		"bin-debug/CSocket.js",
-		"bin-debug/CWebSocket.js",
+		"bin-debug/Utils/Common/CComponent.js",
+		"bin-debug/Utils/Net/ProtoBuilder.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/ProtoBuilder.js",
-		"bin-debug/Controller/StartupCommand.js"
+		"bin-debug/ThemeAdapter.js",
+		"bin-debug/Config/AppConfig.js",
+		"bin-debug/Config/ConfigProto.js",
+		"bin-debug/Controller/AppFacade.js",
+		"bin-debug/Controller/AppMediator.js",
+		"bin-debug/Controller/BaseMediator.js",
+		"bin-debug/Controller/ControllerPrepCommand.js",
+		"bin-debug/Controller/StartupCommand.js",
+		"bin-debug/Controller/ViewPrepCommand.js",
+		"bin-debug/Utils/Language.js",
+		"bin-debug/Utils/ServerData.js",
+		"bin-debug/Utils/SourceUtils.js",
+		"bin-debug/Utils/UpManager.js",
+		"bin-debug/Utils/Utils.js",
+		"bin-debug/Utils/Common/BasePanel.js",
+		"bin-debug/Utils/Common/CComButton.js",
+		"bin-debug/AssetAdapter.js",
+		"bin-debug/Utils/Common/CCTheme.js",
+		"bin-debug/Utils/Common/CRect.js",
+		"bin-debug/Utils/Event/EventManager.js",
+		"bin-debug/Utils/Net/CSocket.js",
+		"bin-debug/Utils/Net/CWebSocket.js",
+		"bin-debug/LoadControl.js"
 	]
 }

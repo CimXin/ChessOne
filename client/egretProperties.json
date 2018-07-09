@@ -5,6 +5,13 @@
   "target": {
     "current": "web"
   },
+  "eui": {
+    "themes": [
+      "resource/default.thm.json"
+    ],
+    "exmlRoot": "resource",
+    "exmlPublishPolicy": "commonjs"
+  },
   "modules": [
     {
       "name": "egret"
@@ -28,12 +35,12 @@
       "name": "eui"
     },
     {
-      "name":"protobuf",
-      "path":"../modules/protobuf"
+      "name": "protobuf",
+      "path": "../modules/protobuf"
     },
     {
-      "name":"puremvc",
-      "path":"../modules/puremvc"
+      "name": "puremvc",
+      "path": "../modules/puremvc"
     }
   ]
 }
