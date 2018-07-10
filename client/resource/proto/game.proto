@@ -1,0 +1,50 @@
+
+// 玩家基础信息
+message PlayerInfo {
+	required int64 playerId = 1; //角色ID
+	required string playerName = 2;	//角色昵称
+	required string headImgUrl = 3;   //头像链接
+	required int32 vipLv = 7; //vip等级
+	required int64 gold = 8;  //金币
+	required int32 level = 9;  //等级
+	required int32 checkCode = 10;  //校验码
+	required int32 registerTime = 11; //注册时间
+}
+
+
+/////////////////////////协议////////////////////////////
+//进入游戏服(PLAYER_ENTER_REQ = 101)
+message PlayerEnterReq {
+	required string account = 1; // 账号（token)
+	required string headImageUrl = 2; // 照片
+	required string nickname = 3; //昵称
+    required int32 sex = 4; //性别
+	required string platform = 5;		// 注册平台渠道
+	required string systemVersion = 6;	// 系统版本
+	required string device = 7;          // 设备码（ios存idfv，android存imei）
+	required int32 deviceType = 8;       // 设备类型（1：android；2：ios；0： 其他）
+	required string channel = 9;		// 渠道标示
+	required int32 loginType = 10 ;  //登陆客户端类型：1 浏览器， 2 微信浏览器， 3 微端',
+}
+
+//进入游戏服结果(PLAYER_ENTER_RESP = 102)
+message PlayerEnterResp {
+	required PlayerInfo playerInfo = 1; // 玩家信息
+	required int64 serverTime = 2; // 服务器时间（毫秒）
+}
+
+//玩家心跳请求(PLAYER_HEARTBEAT_REQ = 103)
+message PlayerHeartbeatReq {
+}
+
+//玩家心跳返回结果(PLAYER_HEARTBEAT_RESP = 104)
+message PlayerHeartbeatResp {
+	required int64 serverTime = 1;  //服务器时间（毫秒）
+}
+
+//玩家请求重连(PLAYER_RECONNECT_REQ = 151)
+message PlayerReconnectReq {
+	required string account = 1; // 账号（token)
+	required int32 clientSign = 2; //验证码
+	required int64 clientTime = 3;	//客户端时间 
+}

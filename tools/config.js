@@ -27,5 +27,12 @@ module.exports.protoPath = function () {
  * 合成之后服务端协议路径
  */
 module.exports.serverProtoPath = function () {
-    return this.rootPath() +"/server/message" 
+    return this.rootPath() + "/server/message"
+}
+
+/**
+ * 合成之后客户端 game.proto 路径
+ */
+module.exports.clientProtoPath = function () {
+    return this.rootPath() + "/client/resource/proto"
 }
