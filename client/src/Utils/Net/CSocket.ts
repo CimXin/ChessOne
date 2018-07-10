@@ -71,10 +71,10 @@ module co {
 
         public constructor() {
             this.m_pRequestCalls = {};
-            // this.m_pHeartbeatTimer = new egret.Timer(1000 * CSocket.TIMER, 0);
-            // this.m_pHeartbeatTimer.addEventListener(egret.TimerEvent.TIMER, this.onTimer, this);
+            this.m_pHeartbeatTimer = new egret.Timer(1000 * CSocket.TIMER, 0);
+            this.m_pHeartbeatTimer.addEventListener(egret.TimerEvent.TIMER, this.onTimer, this);
 
-            // this.m_pCheckTimer = Utils.createTimer(this.onCheckTimer, this, 5);
+            this.m_pCheckTimer = Utils.createTimer(this.onCheckTimer, this, 5);
             // this.m_bIsBattle = false;
 
             this.createSocket();
@@ -219,13 +219,73 @@ module co {
         }
 
         protected onConnected() {
-            console.log("csocket onConnected");
+            console.warn("csocket onConnected");
+            var data = null;
+
+            //重连状态
+            if (this.m_bIsReConnect) {
+
+            } else {
+                data = ProtoBuilder.newClazz(ConfigProto.Common);
+                data.name = "mic";
+            }
+
+            this.requestWithCallback(data, this.onResLogin, this);
 
             this.m_bIsConnected = true;
             this.m_iReConnectCount = 1;
             this.m_bIsReConnect = false;
+        }
 
-            this.sendTest();
+        /**初次登录 */
+        public onResLogin(data) {
+            console.warn("resLogin ", data);
+
+            this.doConnectedCallback();
+        }
+
+        public doConnectedCallback() {
+            if (this.m_pConnectedCallback) {
+                this.m_pConnectedCallback.call(this.m_pConnectedObj);
+            }
+
+            this.m_pDisconnectCallback = null;
+            this.m_pDisconnectObj = null;
+
+            this.m_pConnectedCallback = null;
+            this.m_pConnectedObj = null;
+
+            this.startHeartbeat();
+        }
+
+        /**心跳开启 */
+        public startHeartbeat() {
+            console.warn("心跳还没做呢 todo");
+        }
+
+        /**请求心跳包 */
+        public onTimer() {
+            debug("Csocket onTimer");
+            this.requestWithProtocol(ConfigProto.PlayerHeartbeatReq, this.onHeartbeatTime, this);
+            this.startCheckAlive();
+        }
+
+        protected startCheckAlive() {
+            this.clearCheckAlive();
+            // debug("startCheckAlive");
+            this.m_iCheckAliveTimeout = egret.setTimeout(this.onCheckAlive, this, 15000);
+        }
+        
+        protected onCheckAlive() {
+            // debug("onCheckAlive");
+            this.m_iCheckAliveTimeout = null;
+            this.onClose();
+        }
+
+        protected onHeartbeatTime(resp_msg) {
+            // debug("onHeartbeatTime");
+            this.clearCheckAlive();
+            // Utils.setServerTime(resp_msg.serverTime);
         }
 
         public close(isSelf = true) {
@@ -239,8 +299,24 @@ module co {
 
             this.onClear();
             if (!isSelf) {
-                // this.onDisconnect();
+                this.onDisconnect();
             }
+        }
+
+        protected onDisconnect() {
+            if (this.m_pDisconnectCallback) {
+                this.doDisconnectCallback();
+            } else {
+                // this.laterReconect();
+            }
+        }
+
+        public doDisconnectCallback() {
+            if (this.m_pDisconnectCallback) {
+                this.m_pDisconnectCallback.call(this.m_pDisconnectObj);
+            }
+            this.m_pDisconnectCallback = null;
+            this.m_pDisconnectObj = null;
         }
 
         private onError() {

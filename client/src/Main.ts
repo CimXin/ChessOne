@@ -131,43 +131,14 @@ class Main extends eui.UILayer {
         RES.loadGroup("lanuch", 1);
     }
 
-    private webSocket: egret.WebSocket;
-    private createGameScene1(): void {
-        this.connect();
-    }
-    private onSocketOpen(): void {
-        // for (var i = 0; i < 10; i++) {
-        var data = { "name": "mic", "code": "onLogin" };
-        var cmd = JSON.stringify(data);
-        console.log("连接成功，发送数据：" + cmd);
-        this.webSocket.writeUTF(cmd);
-        // }
-    }
-    private onReceiveMessage(e: egret.Event): void {
-        var msg = this.webSocket.readUTF();
-        var data = JSON.parse(msg);
-        console.log("收到数据：", data);
+    public enterGame() {
+        this.removeControl();
     }
 
-    public onTestClick() {
-        var data = { msg: "click tap" };
-        var cmd = JSON.stringify(data);
-        console.log("点击发送" + cmd);
-        this.webSocket.writeUTF(cmd);
-    }
-
-
-    public connect() {
-        co.CSocket.getInstance().setConnectInfo("127.0.0.1", 3000);
-        co.CSocket.getInstance().close();
-        co.CSocket.getInstance().connect(this.onConnect, this, this.onSocketDisconnect, this);
-    }
-
-    private onConnect(data) {
-        console.error("onConnect", data);
-    }
-
-    private onSocketDisconnect(data) {
-        console.error("onSocketDisconnect", data);
+    public removeControl() {
+        if (this.m_pLoadControl) {
+            this.m_pLoadControl.clearAll();
+            this.m_pLoadControl = null;
+        }
     }
 }

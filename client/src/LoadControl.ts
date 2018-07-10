@@ -112,6 +112,41 @@ module co {
 		public connectServer() {
 			this._loadView.setPercent(78);
 			debug("开始连接服务器...");
+			this._loadView.setTip("正在连接服务器...");
+
+			ServerData.setGameServerAdd("127.0.0.1", 3000);
+
+			CSocket.getInstance().setConnectInfo(ServerData.gameServerIp, ServerData.gameServerPort);
+			CSocket.getInstance().close();
+			CSocket.getInstance().connect(this.onConnect, this, this.onSocketDisconnect, this);
+		}
+
+		public onSocketDisconnect() {
+			debug("服务器连接失败");
+		}
+
+		private onConnect() {
+			this._loadView.setPercent(86);
+			// this.m_bIsEnterGame = false;
+			this.onInitInfo();
+		}
+
+		/**
+		 * 准备进入游戏
+		 */
+		private onInitInfo() {
+			this._loadView.setPercent(99);
+			// SoundFactory.init();
+			AppFacade.getInstance().sendNotification(GameCommand.onInitGame);
+
+			this.main.enterGame();
+		}
+
+		public clearAll() {
+			AppFacade.getInstance().removeMediator("LoadControl");
+			if (this._loadView) {
+				this._loadView.onDestroy();
+			}
 		}
 
 	}

@@ -55,6 +55,10 @@ module co {
         public resize() {
 
         }
+
+        public onDestroy() {
+            this.parent.removeChild(this);
+        }
     }
 
 }

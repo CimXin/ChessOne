@@ -3,6 +3,7 @@ module co {
 		private m_pRoot: eui.UILayer;//根
 		private m_pMenuLevel: egret.DisplayObjectContainer;//菜单层
 		private m_pPopupLevel: egret.DisplayObjectContainer;//弹窗层
+		public static NAME: string = "AppMediator";
 
 		public constructor(viewComponent: any) {
 			super(AppMediator.NAME, viewComponent);
