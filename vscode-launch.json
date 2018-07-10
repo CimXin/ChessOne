@@ -1,0 +1,29 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "打包客户端协议文件",
+            "program": "${workspaceFolder}/tools/client_proto.js"
+        }, {
+            "type": "node",
+            "request": "launch",
+            "name": "打包服务端协议文件",
+            "program": "${workspaceFolder}/tools/server_proto.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "启动服务器",
+            "program": "${workspaceFolder}/server/app_ws.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        }
+    ]
+}
