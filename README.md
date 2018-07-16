@@ -1,1 +1,3 @@
 # ChessOne
+
+mysql.server start

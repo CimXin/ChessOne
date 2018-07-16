@@ -1,8 +1,7 @@
 'use strict';
 
-var cls = require("../utils/class");
 var protobuf = require("protobufjs").Root;
-var testJson = require("../proto/test.json");
+var testJson = require("../message/proto.json");
 var root = protobuf.fromJSON(testJson);
 var CO = root.lookup("CO");
 var CMD = CO.CMD;

@@ -3,12 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app_ws.js"
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "mysql2": "^1.5.3",
     "protobufjs": "^6.8.6",
-    "sequelize": "^4.38.0",
     "ws": "^5.2.1"
   }
 }

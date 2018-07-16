@@ -2,6 +2,10 @@
 
 var WebSocket = require("ws");
 var MessageModel = require("./model/MessageModel");
+var mysql = require("./utils/sql/mysql");
+var config = require("./server-config");
+
+mysql.init(config.mysqlConfig);
 
 var wss = new WebSocket.Server({
     port: 3000
@@ -34,12 +38,3 @@ wss.broadcast = function broadcast(data) {
         }
     });
 };
-
-
-var someoneOnline = function (ws, data) {
-    wss.clients.forEach(function each(client) {
-        if (client !== ws && client.readyState === WebSocket.OPEN) {
-            client.send(data);
-        }
-    });
-}
